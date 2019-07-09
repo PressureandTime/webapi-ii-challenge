@@ -63,4 +63,44 @@ route.post('/:id/comments', async (req, res) => {
   }
 });
 
+
+route.delete('/:id', async (req, res) => {
+  try {
+    const count = await Posts.remove(req.params.id);
+    if (count > 0) {
+      res.status(200).json({ message: 'the post has been deleted' });
+    } else {
+      res.status(404).json({ message: 'the post could not be found' });
+    }
+  } catch (error) {
+  
+    console.log(error);
+    res.status(500).json({
+      message: 'Error removing the post',
+    });
+  }
+});
+
+
+route.put('/:id', async (req, res) => {
+  try {
+    const numberOfAffectedPost = await Posts.update(req.params.id, req.body);
+    if (numberOfAffectedPost) {
+     const result = res.status(200).json(numberOfAffectedPost);
+      
+    } else {
+      res.status(404).json({ message: 'The post could not be found' });
+    }
+  } catch (error) {
+
+    console.log(error);
+    res.status(500).json({
+      message: 'Error updating the post',
+    });
+  }
+});
+
+
+
+
 module.exports = route;
